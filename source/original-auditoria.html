@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Проект ИТ-инфраструктуры и рабочего пространства</title>
+ <style>
+ :root{
+ --bg:#f4f7fc; --card:#ffffff; --text:#18212f; --muted:#5f6b7a; --line:#dde6f0;
+ --primary:#2457d6; --primary2:#4f86ff; --soft:#ecf3ff; --green:#0f766e; --warn:#9a6700;
+ --bad:#b42318; --ink:#0f172a; --shadow:0 14px 36px rgba(24,33,47,.10); --radius:22px;
+ }
+ *{box-sizing:border-box}
+ body{
+ margin:0; font-family:Inter,"Segoe UI",Roboto,Arial,sans-serif; color:var(--text);
+ background:linear-gradient(180deg,#f7faff 0%, #f2f5fb 100%); line-height:1.58;
+ }
+ .wrap{max-width:1140px; margin:0 auto; padding:28px 18px 56px;}
+ .hero{
+ background:linear-gradient(135deg,#1f4ec9 0%, #3a76ff 100%);
+ color:#fff; border-radius:28px; padding:28px 26px; box-shadow:var(--shadow);
+ }
+ .eyebrow{
+ display:inline-block; padding:7px 12px; border-radius:999px;
+ background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.18);
+ font-size:13px; font-weight:700; letter-spacing:.02em; margin-bottom:14px;
+ }
+ h1{margin:0; font-size:clamp(28px,4vw,42px); line-height:1.08;}
+ h2{margin:0 0 10px; font-size:26px; line-height:1.15;}
+ h3{margin:0 0 8px; font-size:19px; line-height:1.22;}
+ .hero p{margin:14px 0 0; max-width:900px; font-size:17px; opacity:.98;}
+ .nav{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;}
+ .btn{
+ text-decoration:none; display:inline-flex; align-items:center; justify-content:center;
+ padding:11px 16px; border-radius:14px; font-weight:700; transition:.2s ease;
+ border:1px solid transparent; cursor:pointer; font:inherit;
+ }
+ .btn.primary{background:#fff; color:#1f4ec9;}
+ .btn.secondary{background:rgba(255,255,255,.12); color:#fff; border-color:rgba(255,255,255,.20);}
+ .btn.action{background:linear-gradient(135deg,#2457d6 0%, #4f86ff 100%); color:#fff; box-shadow:0 10px 24px rgba(36,87,214,.18);}
+ .btn.light{background:#fff; color:var(--primary); border-color:#cfddfb;}
+ .btn.warn{background:#fff9eb; color:#7a4a00; border-color:#f3dfb3;}
+ .btn.danger{background:#fff; color:var(--bad); border-color:#fecaca;}
+ .btn:hover{transform:translateY(-1px);}
+ .section{
+ margin-top:18px; background:var(--card); border-radius:var(--radius);
+ box-shadow:var(--shadow); border:1px solid #edf2f8; padding:24px 22px;
+ }
+ .lead{margin:0 0 14px; color:var(--muted); font-size:16px;}
+ .grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+ .grid.three{grid-template-columns:repeat(3,1fr);}
+ .card{border:1px solid var(--line); border-radius:18px; padding:16px; background:#fff;}
+ .card p{margin:0; color:var(--muted);}
+ .note{border-radius:18px; padding:16px 18px; border:1px solid #d6ebdf; background:#f1fcf6;}
+ .note strong{color:var(--green);}
+ .warn-box{border-radius:18px; padding:16px 18px; border:1px solid #f3dfb3; background:#fff9eb;}
+ .warn-box strong{color:var(--warn);}
+ .field, textarea, select{
+ width:100%; border:1px solid var(--line); border-radius:14px; padding:12px 14px;
+ font:inherit; color:var(--text); background:#fff;
+ }
+ textarea{min-height:116px; resize:vertical;}
+ .small{min-height:86px;}
+ label.caption{display:block; font-weight:700; margin:0 0 7px;}
+ .form-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+ .form-grid .wide{grid-column:1 / -1;}
+ .row-list{display:grid; gap:12px;}
+ .dynamic-row{
+ border:1px solid var(--line); border-radius:18px; padding:14px; background:#fff;
+ display:grid; gap:12px;
+ }
+ .row-head{display:flex; align-items:center; justify-content:space-between; gap:10px;}
+ .row-title{font-weight:800; color:var(--primary);}
+ .mini-grid{display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;}
+ .two-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+ .media-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:14px;}
+ .media-card{border:1px solid var(--line); border-radius:18px; padding:14px; background:#fff;}
+ .media-preview{
+ min-height:190px; border:2px dashed #cfdcf0; border-radius:16px; background:#fbfcfe;
+ display:flex; align-items:center; justify-content:center; text-align:center; color:var(--muted);
+ overflow:hidden; padding:12px; margin:8px 0 12px;
+ }
+ .media-preview img{width:100%; height:100%; max-height:260px; object-fit:cover; border-radius:12px; display:block;}
+ .check-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+ .check-card{border:1px solid var(--line); border-radius:18px; padding:14px; background:#fff;}
+ .check-card h3{font-size:18px;}
+ .check-item{display:flex; gap:9px; align-items:flex-start; padding:8px 0; border-top:1px dashed #e7edf5;}
+ .check-item:first-of-type{border-top:0;}
+ .check-item input{margin-top:5px;}
+ .score-bar{height:12px; border-radius:999px; background:#e8eef8; overflow:hidden;}
+ .score-fill{height:100%; width:0%; background:linear-gradient(90deg,#0f766e 0%, #4f86ff 100%); transition:.2s ease;}
+ .summary{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:14px;}
+ .sum-card{background:#fff; border:1px solid var(--line); border-radius:18px; padding:16px;}
+ .sum-card strong{display:block; font-size:14px; color:var(--muted);}
+ .big{font-size:34px; font-weight:800; color:var(--primary); line-height:1; margin-top:8px;}
+ .pill{
+ display:inline-block; background:#eef4ff; color:#2457d6; padding:6px 10px;
+ border-radius:999px; font-size:13px; font-weight:700; margin:0 8px 8px 0;
+ }
+ .steps{display:grid; gap:12px;}
+ .step{
+ display:grid; grid-template-columns:52px 1fr; gap:14px; align-items:flex-start;
+ border:1px solid var(--line); border-radius:18px; padding:14px;
+ }
+ .num{
+ width:52px; height:52px; border-radius:16px; background:var(--soft); color:var(--primary);
+ display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:800;
+ }
+ .actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:16px;}
+ .footer{margin-top:18px; text-align:center; color:var(--muted); font-size:14px;}
+ @media (max-width:960px){
+ .grid,.grid.three,.form-grid,.mini-grid,.two-grid,.media-grid,.check-grid,.summary{grid-template-columns:1fr;}
+ .form-grid .wide{grid-column:auto;}
+ }
+ @media print{
+ body{background:#fff}
+ .hero,.section{box-shadow:none}
+ .nav,.actions,.remove-btn,.file-input{display:none !important}
+ .section{break-inside:avoid}
+ }
+ </style>
+</head>
+<body>
+ <div class="wrap">
+ <section class="hero">
+ <div class="eyebrow">Техническое задание</div>
+ <h1>Закупка оборудования, ИТ-инфраструктура и организация рабочего пространства</h1>
+ <p>Выберите реальную аудиторию, зону института, рабочее место или организацию. Проведите аудит, подтвердите выводы фотографиями, предложите улучшения, составьте смету и соберите собственный многостраничный HTML-проект для публикации на GitHub Pages.</p>
+ <div class="nav">
+ <a class="btn primary" href="index.html">Главная страница</a>
+ <a class="btn secondary" href="student_checklist_interactive.html">Базовый чек-лист</a>
+ <a class="btn secondary" href="student_report_template.html">Шаблон отчета</a>
+ <a class="btn secondary" href="student_publish_site_guide.html">Публикация сайта</a>
+ </div>
+ </раздел>
+
+ <класс раздела="section">
+ <h2>Итог работы</h2>
+ <p class="lead">Конечным результатом должен быть не набор общих советов, а проектное предложение, которое можно обсудить как реальное улучшение пространства.</p>
+ <div class="grid three">
+ <div class="card">
+ <span class="pill">HTML-проект</span>
+ <h3>Своя страница и подстраницы</h3>
+ <p>Главная страница проекта, аудит объекта, закупка оборудования, эргономика/планировка, визуализации и личные выводы.</p>
+ </div>
+ <div class="card">
+ <span class="pill">Доказательства</span>
+ <h3>Фото и наблюдения</h3>
+ <p>Реальные фотографии выбранного места, описание проблем, подтверждение выводов и ограничения реализации.</p>
+ </div>
+ <div class="card">
+ <span class="pill">Реалистичность</span>
+ <h3>Смета и этапы</h3>
+ <p>Варианты без бюджета, с небольшим бюджетом и с закупкой оборудования, сроки, риски и ожидаемый эффект.</p>
+ </div>
+ </div>
+ </раздел>
+
+ <класс раздела="раздел">
+ <h2>1. Паспорт проекта</h2>
+ <div class="форма-сетка">
+ <div>
+ <label class="caption" for="projectTitle">Название проекта</label>
+ <input class="field" id="projectTitle" type="text" placeholder="Модернизация аудитории 6235 для проектной работы" />
+ </div>
+ <div>
+ <label class="caption" for="objectType">Тип объекта</label>
+ <select id="objectType">
+ <option value="">Компьютерный класс</option>
+ <option>Учебная аудитория</option>
+ <option>Компьютерный класс</option>
+ <option>Рабочее место преподавателя</option>
+ <option>Зона отдыха студентов</option>
+ <option>Серверный узел / сетевая зона</option>
+ <option>Офисное рабочее место</option>
+ <option>Другое пространство</option>
+ </select>
+ </div>
+ <div>
+ <label class="caption" for="roomNumber">Номер аудитории / название организации</label>
+ <input class="field" id="roomNumber" type="text" placeholder="СПбГТИ (ТУ), ФЭМ, аудитория 6235" />
+ </div>
+ <div>
+ <label class="caption" for="audience">Целевая аудитория</label>
+ <input class="field" id="audience" type="text" placeholder="Студенты 1-4 курсов, преподаватели" />
+ </div>
+ <div class="wide">
+ <label class="caption" for="uniqueness">Почему выбранный объект не повторяет чужой проект</label>
+ <textarea id="uniqueness" class="small" placeholder="Исследуется аудитория 6235, так как она является одной из самых маленьких по площади на факультете экономики и менеджмента. Главная проблема аудитории в том, что в ней не может поместиться вся учебная группа, что и отличает этот объект от других проектов. "></textarea>
+ </div>
+ <div class="wide">
+ <label class="caption" for="projectGoal">Цель улучшения</label>
+ <textarea id="projectGoal" placeholder="Создание места для комфортного отдыха студентов между занятиями, а также его модернизация на случай проведения занятий в этой аудитории"></textarea>
+ </div>
+ </div>
+ </section>
+ <section class="section">
+ <h2>2. Команда и обязанности</h2>
+ <p class="lead">Работать можно индивидуально или в команде до 4 человек. Даже в команде каждый участник должен оставить собственный вывод и продемонстрировать личный вклад.</p>
+ <div id="teamList" class="row-list"></div>
+ <div class="actions">
+ <button class="btn action" id="addMemberBtn" type="button">+ Добавить участника</button>
+ </div>
+ </section>
+
+ <section class="section">
+ <h2>3. Универсальный стандарт анализа</h2>
+ <p class="lead">Используйте эту логику как единый стандарт подбора решений для любой организации: сначала задачи и пользователи, затем пространство, техника, сеть, безопасность, эксплуатация и бюджет.</p>
+ <div class="steps">
+ <div class="step"><div class="num">1</div><div><h3>Сценарии работы</h3><p class="lead">Кто пользуется пространством, сколько людей одновременно, какие задачи выполняются, какая нагрузка на технику и сеть.</p></div></div>
+ <div class="step"><div class="num">2</div><div><h3>Текущее состояние</h3><p class="lead">Что уже есть: мебель, компьютеры, периферия, розетки, освещение, вентиляция, сеть, серверный шкаф или слаботочный узел.</p></div></div>
+ <div class="step"><div class="num">3</div><div><h3>Требования</h3><p class="lead">Минимальный, рекомендуемый и перспективный уровень оснащения, эргономики, безопасности и обслуживания.</p></div></div>
+ <div class="step"><div class="num">4</div><div><h3>Варианты решения</h3><p class="lead">Без бюджета, малый бюджет, базовая закупка, расширенная закупка. Для каждого варианта нужны эффект и ограничения.</p></div></div>
+ <div class="step"><div class="num">5</div><div><h3>Смета и жизненный цикл</h3><p class="lead">Цена покупки, расходные материалы, обслуживание, срок службы, возможность модернизации, риски простоя и итоговая стоимость владения.</p></div></div>
+ <div class="step"><div class="num">6</div><div><h3>Защита проекта</h3><p class="lead">Почему именно это решение подходит выбранной аудитории, какие доказательства собраны и как можно реализовать проект по этапам.</p></div></div>
+ </div>
+ </section>
+ <section class="section">
+ <h2>4. Выездной аудит и реальные фотографии</h2>
+ <p class="lead">Посетите выбранное место лично. Добавьте фотографии текущего состояния, подписи и выводы. Файлы не сохраняются на странице автоматически, поэтому для публикации поместите изображения в папку images и укажите относительные пути. </p>
+ <div id="photoList" class="media-grid"></div>
+ <div class="actions">
+ <button class="btn action" id="addPhotoBtn" type="button">+ Добавить фото</button>
+ </div>
+ </section>
+
+ <section class="section">
+ <h2>5. Проект закупки оборудования</h2>
+ <p class="lead">Подбирайте оборудование под задачи пользователей, а не просто по максимальным характеристикам. Каждая позиция должна иметь назначение, краткое обоснование и ориентировочную цену.</p>
+ <div id="equipmentList" class="row-list"></div>
+ <div class="actions">
+ <button class="btn action" id="addEquipmentBtn" type="button">+ Добавить позицию</button>
+ </div>
+ <div class="grid" style="margin-top:14px;">
+ <div class="card">
+ <h3>Решения без бюджета или с минимальными затратами</h3>
+ <textarea id="noBudgetPlan" class="small" placeholder="Если денег почти нет, делаем все, что можем, своими силами: переставляем столы, связываем кабели стяжками, проветриваем по графику вместо кондиционера, подкладываем книги под мониторы, делаем разминку вместо эргономичных кресел. Из того, что придется купить: подержанный XGA-проектор за 3000 рублей, вместо экрана — лист оргалита, покрытый белой краской, за 500 рублей, 8 пластиковых табуретов за 6400 рублей, столы бесплатно с «Авито», летом — вентилятор за 1500 рублей. Системные блоки, мониторы, клавиатуры, мыши, нормальные кресла и ИБП в этом варианте некуда ставить — либо студенты приходят со своими ноутбуками, либо техники вообще нет. Итого около 11 000 рублей, но это решение только для экстренного старта. Компромиссы: плохая картинка, жёсткие сиденья, никакой защиты от скачков напряжения и кондиционера. "></textarea>
+ </div>
+ <div class="card">
+ <h3>Решения с закупками</h3>
+ <textarea id="budgetPlan" class="small" placeholder="Закупаем все сразу, не переплачивая за бренды. Проектор Full HD LED за 14 000 рублей с ресурсом 30 000 часов, ручной экран 200×150 см за 5000 рублей. Восемь стульев Eames за 16 000 рублей — пластик, экокожа, легко моются. Два стола, собранных своими руками из мебельных щитов и стальных опор, за 10 000 рублей — в 2–3 раза дешевле готовых. Сплит-система за 22 000 рублей без лишних функций. Двадцать системных блоков по 35 000 рублей (i3/Ryzen 5, 16 ГБ ОЗУ, SSD 480 ГБ, без дискретной видеокарты). Двадцать мониторов 24 дюйма с IPS-матрицей по 5500 рублей с антибликовым покрытием и защитой для глаз. Двадцать комплектов проводных клавиатур и мышей по 800 рублей. Двадцать ученических кресел по 6000 рублей с газлифтом и моющейся обивкой. Десять ИБП по 5000 рублей (один на два ПК). Все рассчитано на 7–10 лет работы, расходных материалов почти нет. "></textarea>
+ </div>
+ </div>
+ <div style="margin-top:14px;">
+ <label class="caption" for="tco">Итоговая логика бюджета и стоимости владения</label>
+ <textarea id="tco" placeholder="Полная закупка всех десяти позиций — 1 063 000 рублей. Это на 60–70 % дешевле брендовых аналогов (там было бы под 2,5 миллиона). Экономия за счёт сборки столов своими руками, отказа от дискретной видеокарты, одного ИБП на два ПК, проводной периферии и простой сплит-системы. Срок службы: ПК и мониторов — 5–7 лет, проектора — до 20 лет, столов и экрана — более 10 лет, кресел и стульев — 7–10 лет, ИБП — 5–7 лет. Ежегодное обслуживание: чистка от пыли, подтяжка болтов, редкая замена батарей в ИБП. Никаких регулярных расходов на расходные материалы вроде ламп для проектора. Одно рабочее место обходится примерно в 1500 рублей в месяц — дешевле, чем кофе по дороге в университет. Если бюджета нет, остаёмся на первом варианте за 11 000 рублей, но тогда без нормальных ПК, кондиционера и защиты от скачков."></textarea>
+ </div>
+ </section>
+
+ <класс раздела="section">
+ <h2>6. Эргономика, зоны отдыха и серверные узлы</h2>
+ <div class="grid">
+ <div class="card">
+ <h3>Рабочие места</h3>
+ <textarea id="workplaceErgo" class="small" placeholder="Столы и проходы: длинные столы на металлокаркасе поставить параллельно окнам. Оставить проход между столами и стеной не менее 80 см для свободного перемещения стульев. Кабели: провода от ноутбуков убрать в недорогие пластиковые кабель-каналы (клипсы) под столешницами. Они не должны свисать и мешать. Розетки: к каждому столу подвести сетевой фильтр (удлинитель) на 4–5 розеток. Закрепите его под столешницей на двусторонний скотч или хомуты, чтобы обеспечить легкий доступ к зарядным устройствам. Мониторы/ноутбуки: оптимальное расстояние от глаз студента до экрана ноутбука — 50–70 см. "></textarea>
+ </div>
+ <div class="card">
+ <h3>Зоны отдыха и восстановления</h3>
+ <textarea id="restZone" class="small" placeholder="Диванная группа: разместить по центру (как на фото) напротив экрана. Это зона для психологической разгрузки, коротких обсуждений и работы с ноутбуком на коленях. Барная стойка: выделенная зона для «быстрой» работы и перерывов. Студент может поработать стоя или пересесть на высокий стул, чтобы сменить позу и размять спину. Зарядный хаб: рядом с диваном и у барной стойки обязательно установите розетки с USB-разъемами для быстрой подзарядки телефонов и планшетов. Зона кофе/воды: кулер с водой установите в углу у барной стойки. Рядом организуйте место для стаканчиков и салфеток. "></textarea>
+ </div>
+ <div class="card">
+ <h3>Сеть и серверный узел</h3>
+ <textarea id="serverNode" class="small" placeholder="Wi-Fi: закрепить роутер на стене на высоте от 2 метров (желательно в центре комнаты или ближе к потолку), чтобы сигнал равномерно покрывал всю аудиторию без «слепых» зон. Коммутатор и ИБП: если планируется использовать стационарный компьютер преподавателя или сетевой накопитель, спрячьте мини-шкаф (или аккуратную полочку с коммутатором и ИБП) в углу за вентилятором или шторами, ограничив физический доступ студентов. Маркировка: все кабели питания и интернет-кабели (патч-корды) пометить цветными бирками с обеих сторон (например, «Стол 1», «Проектор», «Роутер»), чтобы в случае сбоя сразу найти нужный провод. "></textarea>
+ </div>
+ <div class="card">
+ <h3>Безопасность и доступность</h3>
+ <textarea id="safetyAccess" class="small" placeholder="Электробезопасность: все удлинители и розетки должны быть фабричного производства, с заземлением и защитой от перегрузок. Суммарная мощность техники (ноутбуки + кондиционер + кулер) не должна превышать возможности проводки. Пожарная безопасность: обивка дивана, ковер и шторы должны быть обработаны огнезащитным составом (или иметь соответствующую маркировку). Путь от дивана и дальних столов к входной двери должен быть абсолютно свободным. Устойчивость мебели: Самодельные столы (из мебельных щитов) и высокая барная стойка должны иметь жесткий каркас, исключающий шатание."></textarea>
+ </div>
+ </div>
+ </section>
+
+ <класс раздела="section">
+ <h2>7. AI-визуализации будущего пространства</h2>
+ <p class="lead">Добавьте не менее 5 визуализаций. Для каждой укажите тему, назначение изображения и то, что именно оно помогает доказать. Можно использовать ИИ-генератор, графический редактор или собственную схему.</p>
+ <div id="visualList" class="media-grid"></div>
+ <div class="media-card">
+ <div class="row-head">
+ <h3>AI-визуализация 1</h3>
+ </div>
+ <div class="ph" style="padding:0; overflow:hidden;">
+ <img src="https://i.imgur.com/OyrhKrj.jpeg" alt="Фото рабочего места 1" style="width:50%; height:100%; object-fit:cover; display:block;">
+ </div>
+ <input class="file-input" type="file" accept="image/*" />
+ <label class="caption" style="margin-top:10px;">Путь к файлу для публикации</label>
+ <input class="field" type="text" placeholder="https://i.imgur.com/OyrhKrj.jpeg" />
+ <label class="caption" style="margin-top:10px;">Описание или метод создания</label>
+ <textarea class="small" placeholder="(Закинули фотки аудитории 6235 с разных сторон) Для этой аудитории сделай: 
+Фотореалистичный современный учебный кабинет университета для практических занятий, рассчитанный ровно на 30 студентов. Просторная аудитория с гармоничной планировкой и правильной архитектурой без визуальных ошибок, кривых объектов или несостыковок. В помещении удобно расположены 30 эргономичных рабочих мест: современные столы и кресла, достаточное расстояние между рядами для свободного передвижения преподавателя и студентов.
+В аудитории есть полноценная практическая зона: компьютеры или рабочие станции, интерактивная панель, проектор, хорошее освещение для занятий, продуманная электрика и система укладки кабелей. Все выглядит реалистично и функционально, как в дорогом современном европейском университете или IT-академии. 
+ Отдельно обустроена уютная chill-зона для отдыха студентов: мягкие диваны, пуфы, кофейный столик, растения, мягкий теплый свет, стильный минималистичный интерьер. Chill-зона органично вписана в пространство и не мешает учебному процессу.
+Дизайн аудитории выполнен в современном стиле: натуральные материалы, дерево, стекло, серые и теплые бежевые оттенки, панорамные окна, аккуратная акустика на стенах и потолке. Высокие потолки, естественное дневное освещение, реалистичные тени и отражения.
+Максимально гармоничная композиция: правильная перспектива, симметрия, реалистичные пропорции мебели и людей, анатомически корректные изображения студентов, никаких лишних предметов, артефактов, деформаций или ошибок искусственного интеллекта. Атмосфера продуктивности, комфорта и современного студенческого пространства. Ультрареалистичное кинематографическое освещение, качество архитектурной визуализации, высокая детализация, 8K, фотореалистичный дизайн интерьера, идеальная композиция. 
+"></textarea>
+ <label class="caption" style="margin-top:10px;">Назначение визуализации</label>
+ <textarea class="small" placeholder="Показать аудиторию с позиции студента, который сидит за партой и смотрит на доску и преподавателя, при этом за его спиной находится зона отдыха с диваном, телевизором и дополнительными элементами."></textarea>
+ <label class="caption" style="margin-top:10px;">Что доказывает изображение</label>
+ <textarea class="small" placeholder="Подтверждает идею разделения пространства на учебную и рекреационную зоны, где обучение и отдых могут сочетаться в одном помещении без ущерба для комфорта."></textarea>
+ </div>
+ <div class="media-card">
+ <div class="row-head">
+ <h3>AI-визуализация 2</h3>
+ </div>
+ <div class="ph" style="padding:0; overflow:hidden;">
+ <img src="https://i.imgur.com/dLuZOlC.jpeg" alt="Фото рабочего места 1" style="width:50%; height:100%; object-fit:cover; display:block;">
+ </div>
+ <input class="file-input" type="file" accept="image/*" />
+ <label class="caption" style="margin-top:10px;">Путь к файлу для публикации</label>
+ <input class="field" type="text" placeholder="https://i.imgur.com/dLuZOlC.jpeg" />
+ <label class="caption" style="margin-top:10px;">Комментарий или способ создания</label>
+ <textarea class="small" placeholder="Возьми это исходное фото и аккуратно разверни всех студентов так, чтобы они стояли спиной к телевизору с PS5 на передней стене. Сохрани исходную композицию кабинета, расположение столов, ноутбуков, мебели, растений, освещение и общий интерьер. Студенты должны выглядеть естественно, как будто они просто развернулись к своим рабочим местам или к проходу, без неестественных поз и искажений. Важно, чтобы сцена выглядела реалистично, чисто и аккуратно, без визуального мусора, лишних изменений в помещении и ухудшения качества изображения. Телевизор, стены, окна, шкафы и вся обстановка остаются прежними. Фотореализм, естественные тени, правильная перспектива, высокое качество.
+ <label class="caption" style="margin-top:10px;">Назначение визуализации</label>
+ <textarea class="small" placeholder="Показать аудиторию с задней части помещения, где видна вся структура класса: ряды парт с ноутбуками, большие окна, освещение, растения, доска и проектор. Также видна зона отдыха с диванчиком, телевизором и дополнительными функциональными элементами."></textarea>
+ <label class="caption" style="margin-top:10px;">Что доказывает это изображение</label>
+ <textarea class="small" placeholder="Демонстрирует продуманную организацию пространства и зонирование аудитории на учебную и комфортную зоны, а также удобство и функциональность помещения."></textarea>
+ </div>
+ <div class="media-card">
+ <div class="row-head">
+ <h3>AI-визуализация 3</h3>
+ </div>
+ <div class="ph" style="padding:0; overflow:hidden;">
+ <img src="https://i.imgur.com/MARrAy0.jpeg" alt="Фото рабочего места 1" style="width:50%; height:100%; object-fit:cover; display:block;">
+ </div>
+ <input class="file-input" type="file" accept="image/*" />
+ <label class="caption" style="margin-top:10px;">Путь к файлу для публикации</label>
+ <input class="field" type="text" placeholder="https://i.imgur.com/MARrAy0.jpeg" />
+ <label class="caption" style="margin-top:10px;">Промпт или метод создания</label>
+ <textarea class="small" placeholder="Убери людей с первого созданного рисунка"></textarea>
+ <label class="caption" style="margin-top:10px;">Назначение визуализации</label>
+ <textarea class="small" placeholder="Показать первый ракурс аудитории без людей, чтобы лучше рассмотреть расстановку парт, освещение, окна, доску, проектор и общую структуру помещения."></textarea>
+ <label class="caption" style="margin-top:10px;">Что доказывает это изображение</label>
+ <textarea class="small" placeholder="Позволяет оценить функциональность и логичность планировки без отвлекающих элементов и подтверждает продуманность организации пространства."></textarea>
+ </div>
+ <div class="media-card">
+ <div class="row-head">
+ <h3>AI-визуализация 4</h3>
+ </div>
+ <div class="ph" style="padding:0; overflow:hidden;">
+ <img src="https://i.imgur.com/nQ6CHfk.jpeg" alt="Фото рабочего места 1" style="width:50%; height:100%; object-fit:cover; display:block;">
+ </div>
+ <input class="file-input" type="file" accept="image/*" />
+ <label class="caption" style="margin-top:10px;">Путь к файлу для публикации</label>
+ <input class="field" type="text" placeholder="https://i.imgur.com/nQ6CHfk.jpeg" />
+ <label class="caption" style="margin-top:10px;">Описание или метод создания</label>
+ <textarea class="small" placeholder="(Закинул фотку 1 рисунка и написал) Сделай фотореалистичный дизайн этого учебного кабинета с идеально продуманной проводной системой, чтобы всё выглядело чисто и профессионально. Важно показать не просто интерьер, а грамотную инженерную организацию: все кабели, розетки, кабель-каналы, сетевые линии, питание для ноутбуков, проектора и рабочего оборудования должны быть аккуратно спрятаны или проложены по логичным маршрутам. Никаких свисающих проводов, хаоса, визуального мусора и ощущения, что ремонт сделан на скорую руку. Используй скрытую проводку, кабельные лотки под столами, аккуратные выводы к каждому рабочему месту, минималистичные настенные панели, чистую геометрию, современные материалы, нейтральную палитру, мягкий дневной свет и реалистичную глубину пространства. Интерьер должен выглядеть так же, как в оригинале, ничего не трогай и не меняй, только добавь. "></textarea>
+ <label class="caption" style="margin-top:10px;">Назначение визуализации</label>
+ <textarea class="small" placeholder="Показать переднюю часть аудитории без людей с реализованной системой проводки, включая аккуратно вмонтированные кабель-каналы, розетки и подключение оборудования в зоне преподавателя и у доски."></textarea>
+ <label class="caption" style="margin-top:10px;">Что доказывает это изображение</label>
+ <textarea class="small" placeholder="Демонстрирует грамотную инженерную организацию пространства в учебной зоне, где все коммуникации скрыты и логично распределены, что обеспечивает безопасность, аккуратность и современный внешний вид."></textarea>
+ </div>
+ <div class="media-card">
+ <div class="row-head">
+ <h3>AI-визуализация 5</h3>
+ </div>
+ <div class="ph" style="padding:0; overflow:hidden;">
+ <img src="https://i.imgur.com/oZf56kE.jpeg" alt="Фото рабочего места 1" style="width:50%; height:100%; object-fit:cover; display:block;">
+ </div>
+ <input class="file-input" type="file" accept="image/*" />
+ <label class="caption" style="margin-top:10px;">Путь к файлу для публикации</label>
+ <input class="field" type="text" placeholder="https://i.imgur.com/oZf56kE.jpeg" />
+ <label class="caption" style="margin-top:10px;">Промпт или метод создания</label>
+ <textarea class="small" placeholder="(Закинул фотку, 2 рисунка и написал) Убери людей и сделай фотореалистичный дизайн этого учебного кабинета с идеально продуманной проводной системой, чтобы всё выглядело чисто и профессионально. Важно показать не просто интерьер, а именно грамотную инженерную организацию: все кабели, розетки, кабель-каналы, сетевые линии, питание для ноутбуков, проектора и рабочего оборудования должны быть аккуратно спрятаны или проложены по логичным маршрутам. Никаких свисающих проводов, хаоса, визуального мусора и ощущения дешевого ремонта. Используйте скрытую проводку, кабельные лотки под столами, аккуратные выводы к каждому рабочему месту, минималистичные настенные панели, четкую геометрию, современные материалы, нейтральную палитру, мягкий дневной свет и реалистичную глубину пространства. Интерьер должен выглядеть каким был в оригинале ничего не трогай и не изменяй только добавь."></textarea>
+ <label class="caption" style="margin-top:10px;">Назначение визуализации</label>
+ <textarea class="small" placeholder="Показать реализованную систему проводки и подключений в задней части аудитории без людей, включая кабельные каналы, розетки и организацию питания оборудования."></textarea>
+ <label class="caption" style="margin-top:10px;">Что доказывает это изображение</label>
+ <textarea class="small" placeholder="Подтверждает реализацию инженерного решения по аккуратной и скрытой прокладке проводов, обеспечивающей безопасность, удобство и эстетичный внешний вид помещения."></textarea>
+ </div>
+
+ <класс div="действия">
+ <button class="btn action" id="addVisualBtn" type="button">+ Добавить визуализацию</button>
+ </div>
+ </section>
+
+ <класс раздела="section">
+ <h2>8. Обязательный чек-лист качества</h2>
+ <p class="lead">Отмечайте пункты только после того, как они будут выполнены. Итоговый процент поможет понять, насколько проект готов к сдаче.</p>
+ <div class="summary">
+ <div class="sum-card"><strong>Закрыто пунктов</strong><div class="big" id="doneCount">0</div></div>
+ <div class="sum-card"><strong>Всего пунктов</strong><div class="big" id="totalCount">0</div></div>
+ <div class="sum-card"><strong>Готовность</strong><div class="big" id="readyPercent">0%</div></div>
+ <div class="sum-card"><strong>Статус</strong><div id="readyStatus" style="margin-top:8px; font-weight:800;">Начните заполнение</div></div>
+ </div>
+ <div class="score-bar" style="margin-top:12px;"><div class="score-fill" id="scoreFill"></div></div>
+ <div id="qualityChecklist" class="check-grid" style="margin-top:14px;"></div>
+ </раздел>
+
+ <класс раздела="раздел">
+ <h2>9. Структура итогового HTML-сайта</h2>
+ <p class="lead">Итоговая работа должна быть многостраничной. Главная страница проекта связывает все подстраницы и ведёт преподавателя по логике исследования.</p>
+ <div class="сетка">
+ <div class="card">
+ <h3>Обязательные страницы</h3>
+ <ul>
+ <li><strong>index.html</strong> — главная страница проекта и краткое описание;</li>
+ <li><strong>audit.html</strong> — фотофиксация, проблемы и результаты чек-листов;</li>
+ <li><strong>equipment.html</strong> — закупка, смета, обоснование выбора оборудования;</li>
+ <li><strong>ergonomics.html</strong> — планировка, рабочие места, зона отдыха, серверный узел;</li>
+ <li><strong>visuals.html</strong> — минимум 5 визуализаций с помощью искусственного интеллекта;</li>
+ <li><strong>reflection.html</strong> — личные выводы участников и вклад команды.</li>
+ </ul>
+ </div>
+ <div class="card">
+ <h3>Что нельзя сдавать</h3>
+ <ul>
+ <li>текст без фотографий выбранного места;</li>
+ <li>универсальные советы без привязки к аудитории или организации;</li>
+ <li>картинки без пояснения, какую проблему они решают;</li>
+ <li>смету без обоснования выбора оборудования;</li>
+ <li>командную работу без личных выводов каждого участника.</li>
+ </ul>
+ </div>
+ </div>
+ <div class="warn-box" style="margin-top:14px;"><strong>Важно:</strong> тема программного обеспечения будет отдельным заключительным этапом курса. В этой работе можно кратко отметить потребности в ПО, но основной фокус должен быть на аппаратном обеспечении, пространстве, эргономике, сети и реалистичности внедрения.</div>
+ </секция>
+
+ <класс секции="секция">
+ <h2>10. Итоговые выводы</h2>
+ <div class="grid">
+ <div class="card">
+ <h3>Общий вывод по проекту</h3>
+ <textarea id="finalProjectConclusion" placeholder="Наибольший эффект дадут: зонирование пространства, мобильная/трансформируемая мебель, управление освещением и снижение уровня шума. Ограничения проекта: бюджет, привязка к существующим розеткам, невозможность сверлить стены. Проект реализуем, так как изменения поэтапные, обратимые и не требуют капитального ремонта."></textarea>
+ </div>
+ <div class="card">
+ <h3>План внедрения по этапам</h3>
+ <textarea id="implementationPlan" placeholder="Этап 1. Быстрые действия (1–2 дня): уберите лишнее и неиспользуемое. Переставьте имеющуюся мебель без закупок. Наклейте временную разметку зон. Введите простые правила использования аудитории. Этап 2. Закупки: определите, что и в каком количестве нужно закупить. В приоритете — самые важные и при этом бюджетные решения (ширмы, локальное освещение, органайзеры). Зафиксируйте сроки поставки и ответственных за утверждение. Этап 3. Монтаж / перестановка (1–3 дня): расставить все по утвержденной схеме. Протянуть кабели и спрятать их в кабель-каналы. Выполнить крепления там, где это разрешено. Этап 4. Проверка результата (1 день после монтажа): провести опрос участников. Измерить ключевые показатели (уровень шума, скорость подготовки к работе). Определить, кто будет проводить проверку и что считать успехом. Этап 5. Обслуживание (постоянно): назначить ответственного за порядок. Внедрить чек-лист для осмотра и уборки раз в 2–4 недели. Регламентировать замену изношенных и сломанных предметов. "></textarea>
+ </div>
+ </div>
+ <div class="note" style="margin-top:14px;"><strong>Хорошая защита проекта</strong> объединяет в себе реальные наблюдения, фотографии, смету, ограничения помещения, потребности пользователей и понятный эффект от внедрения.</div>
+ <div class="actions">
+ <button class="btn action" id="saveBtn" type="button">Сохранить черновик</button>
+ <button class="btn light" id="printBtn" type="button">Сохранить как PDF / распечатать</button>
+ <button class="btn warn" id="clearBtn" type="button">Очистить черновик</button>
+ </div>
+ </раздел>
+
+ <div class="footer">После заполнения перенесите материалы в собственные HTML-страницы, проверьте ссылки и опубликуйте проект через GitHub Pages.</div>
+ </div>
+
+<script>
+const storageKey = 'workspaceInfrastructureProjectDraft';
+
+const checklistGroups = [
+ {
+ title:'Объект и доказательства',
+ items:[
+ 'Выбран конкретный объект: аудитория, зона, рабочее место или организация.',
+ 'Объяснено, почему проект не повторяет работы других студентов.',
+ 'Приведены реальные фотографии текущего состояния объекта.',
+ 'Проблемы подтверждаются наблюдениями, а не только личными ощущениями.'
+ ]
+ },
+ {
+ title: 'Пользователи и сценарии',
+ items:[
+ 'Описана целевая аудитория и количество пользователей.',
+ 'Перечислены основные задачи, которые выполняются в пространстве.',
+ 'Показано, какие требования предъявляются к технике, мебели, освещению и сети в связи с этими задачами.',
+ 'Учтены ограничения, связанные с помещением, расписанием, бюджетом или доступом.'
+ ]
+ },
+ {
+ title: 'Аппаратное обеспечение',
+ items:[
+ 'Оборудование подобрано под задачи, а не по принципу максимальных характеристик.',
+ 'Для каждой позиции закупки указано назначение и обоснование.',
+ 'Указана ориентировочная стоимость и количество единиц.',
+ 'Учтены обслуживание, срок службы, модернизация и расходные материалы.'
+ ]
+ },
+ {
+ title:'Эргономика и пространство',
+ items:[
+ 'Рассмотрены столы, кресла, посадка, высота экранов и освещение.',
+ 'Предложены улучшения без бюджета или с минимальными затратами.',
+ 'Продумана зона отдыха, восстановления сил или кратковременной самостоятельной работы.',
+ 'Решения не ухудшают проходимость, безопасность и доступность пространства.'
+ ]
+ },
+ {
+ title:'Сеть, серверный узел и безопасность',
+ items:[
+ 'Проведена оценка Wi-Fi, сетевых розеток, кабелей и потребности в коммутаторе.',
+ 'При необходимости описаны серверный шкаф, ИБП, вентиляция и ограничение доступа.',
+ 'Учтены электробезопасность, нагрузка на розетки и прокладка кабелей.',
+ 'Показаны риски простоя, перегрева, повреждения или несанкционированного доступа.'
+ ]
+ },
+ {
+ title:'Визуализация и публикация',
+ items:[
+ 'Добавлено не менее 5 визуализаций будущего пространства.',
+ 'Для каждой визуализации указан промпт или метод создания.',
+ 'Итоговый проект оформлен в виде многостраничного HTML-сайта.',
+ 'Сайт опубликован в публичном репозитории на GitHub Pages.'
+ ]
+ },
+ {
+ title:'Командная работа и выводы',
+ items:[
+ 'Указаны участники команды и обязанности каждого.',
+ 'Каждый участник написал собственный вывод о проделанном исследовании.',
+ 'Команда показала, какие решения можно реализовать сейчас, а какие требуют бюджета.',
+ 'Итоговый вывод связывает аудит, смету, эргономику, инфраструктуру и эффект.'
+ ]
+ }
+];
+
+пусть state = { 
+ команда:[{название:", обязанности:", роль:", заключение:"}],
+ оборудование:[{название:'', характеристики:'', количество:'', цена:'', причина:'', приоритет:'Рекомендуемая'}],
+ фотографии:[{путь:'', подпись:'', находка:''},{путь:'', подпись:'', находка:''}],
+ визуальные материалы:[
+ {путь:", подсказка:", цель:", критерии:"}, 
+ {путь:", подсказка:", цель:", критерии:"}, 
+ {путь:", подсказка:", цель:", критерии:"}, 
+ {путь:", подсказка:", цель:", критерии:"}, 
+ {путь:", подсказка:", цель:", критерии:"}
+ ],
+ checklist:{}
+};
+
+function byId(id){
+ return document.getElementById(id);
+}
+
+function escapeHtml(value){
+ return String(value || '').replace(/[&<>"']/g, char => ({
+ '&':'&amp;', '<':'<', '>':'>', '"':'"', "'":'&#39;'
+ }[char]));
+}
+
+function updateDynamicLabels(){
+ document.querySelectorAll('[data-dynamic-number]').forEach((el, index) => {
+ el.textContent = el.dataset.dynamicNumber + ' ' + (index + 1);
+ });
+}
+
+function renderTeam(){
+ const list = byId('teamList');
+ list.innerHTML = '';
+ state.team.forEach((member, index) => {
+ const row = document.createElement('div');
+ row.className = 'dynamic-row';
+ row.innerHTML = `
+ <div class="row-head">
+ <div class="row-title" data-dynamic-number="Участник">Участник ${index + 1}</div>
+ <button class="btn danger remove-btn" type="button" data-remove-team="${index}">Удалить</button>
+ </div>
+ <div class="mini-grid">
+ <div><label class="caption">ФИО</label><input class="field" data-team="${index}" data-field="name" type="text" value="${escapeHtml(member.name)}" placeholder="Рзаев Мирвалех" /></div>
+ <div><label class="caption">Роль в проекте</label><input class="field" data-team="${index}" data-field="role" type="text" value="${escapeHtml(member.role)}" placeholder="Оформление работы" /></div>
+ <div><label class="caption">Зона ответственности</label><textarea class="small" data-team="${index}" data-field="conclusion" placeholder="Оформление текстового и внешнего вида HTML-отчета" >${escapeHtml(member.conclusion)}</textarea></div>
+ </div>
+ <div><label class="caption">Личный вывод участника</label><textarea class="small" data-team="${index}" data-field="conclusion" placeholder="Когда оформлял отчёт, особенно вдумался в разницу между вариантом «без денег» и вариантом «с закупкой». Стало очевидно, что экономия на системных блоках, креслах и кондиционере превращает учёбу в выживание, и лучше один раз нормально вложиться, чем потом мучиться пять лет. ">${escapeHtml(member.conclusion)}</textarea></div>
+ <div class="row-head">
+ <div class="row-title" data-dynamic-number="Участник">Участник ${index + 2}</div>
+ <button class="btn danger remove-btn" type="button" data-remove-team="${index}">Удалить</button>
+ </div>
+ <div class="mini-grid">
+ <div><label class="caption">ФИО</label><input class="field" data-team="${index}" data-field="name" type="text" value="${escapeHtml(member.name)}" placeholder="Лебедев Андрей" /></div>
+ <div><label class="caption">Роль в проекте</label><input class="field" data-team="${index}" data-field="role" type="text" value="${escapeHtml(member.role)}" placeholder="Генератор идей" /></div>
+ <div><label class="caption">Зона ответственности</label><textarea class="small" data-team="${index}" data-field="conclusion" placeholder="Выполнение общих задач, идейные предложения по улучшению работы с аудиторией." >${escapeHtml(member.conclusion)}</textarea></div>
+ </div>
+ <div><label class="caption">Личный вывод участника</label><textarea class="small" data-team="${index}" data-field="conclusion" placeholder="Наконец-то я понял, зачем вообще всё это затевалось: как только меняешь пространство, сразу становится удобнее работать. Лично я анализировал, что не так с аудиторией, придумывал, как лучше разделить ее на зоны, и прикидывал, насколько наши идеи вообще реализуемы. ">${escapeHtml(member.conclusion)}</textarea></div>
+ <div class="row-head">
+ <div class="row-title" data-dynamic-number="Участник">Участник ${index + 3}</div>
+ <button class="btn danger remove-btn" type="button" data-remove-team="${index}">Удалить</button>
+ </div>
+ <div class="mini-grid">
+ <div><label class="caption">ФИО</label><input class="field" data-team="${index}" data-field="name" type="text" value="${escapeHtml(member.name)}" placeholder="Григорян Альберт" /></div>
+ <div><label class="caption">Роль в проекте</label><input class="field" data-team="${index}" data-field="role" type="text" value="${escapeHtml(member.role)}" placeholder="Дизайнер" /></div>
+ <div><label class="caption">Зона ответственности</label><textarea class="small" data-team="${index}" data-field="conclusion" placeholder="Визуализация и дизайн аудитории, подбор стилей интерьера, расстановка мебели и прочие мелочи." >${escapeHtml(member.conclusion)}</textarea></div>
+ </div>
+ <div><label class="caption">Личный вывод участника</label><textarea class="small" data-team="${index}" data-field="conclusion" placeholder="Я понял, что недостаточно просто поставить парты и доску, важно грамотно организовать пространство, чтобы учиться было удобно и эффективно. В работе я придумывал концепцию аудитории, составлял промпты для картинок и генерировал итоговые визуализации того, как мы предлагаем организовать комнату.">${escapeHtml(member.conclusion)}</textarea></div>
+ <div class="row-head">
+ <div class="row-title" data-dynamic-number="Участник">Участник ${index + 4}</div>
+ <button class="btn danger remove-btn" type="button" data-remove-team="${index}">Удалить</button>
+ </div>
+ <div class="mini-grid">
+ <div><label class="caption">ФИО</label><input class="field" data-team="${index}" data-field="name" type="text" value="${escapeHtml(member.name)}" placeholder="Прутковский Матвей" /></div>
+ <div><label class="caption">Роль в проекте</label><input class="field" data-team="${index}" data-field="role" type="text" value="${escapeHtml(member.role)}" placeholder="Поиск необходимой информации" /></div>
+ <div><label class="caption">Зона ответственности</label><textarea class="small" data-team="${index}" data-field="conclusion" placeholder="Поиск информации, подбор и анализ необходимого оборудования" >${escapeHtml(member.conclusion)}</textarea></div>
+ </div>
+ <div><label class="caption">Личный вывод участника</label><textarea class="small" data-team="${index}" data-field="conclusion" placeholder="В процессе работы я своими глазами увидел, что главная проблема нашей аудитории — даже не старые компьютеры, а неудачная расстановка столов: из-за тесноты ни пройти нормально, ни подойти к каждому студенту. Поэтому одним обновлением техники тут не обойтись — нужна полноценная перепланировка, а то и вовсе другое помещение. ">${escapeHtml(member.conclusion)}</textarea></div>
+ `;
+ list.appendChild(row);
+ });
+ byId('addMemberBtn').disabled = state.team.length >= 4;
+}
+
+function renderEquipment(){
+ const list = byId('equipmentList');
+ list.innerHTML = '';
+ state.equipment.forEach((item, index) => {
+ const row = document.createElement('div');
+ row.className = 'dynamic-row';
+ row.innerHTML = `
+ <div class="row-head">
+ <div class="row-title">Позиция закупки ${index + 1}</div>
+ <button class="btn danger remove-btn" type="button" data-remove-equipment="${index}">Удалить</button>
+ </div>
+ <div class="mini-grid">
+ <div><label class="caption">Оборудование</label><textarea class="small" data-equipment="${index}" data-field="reason" placeholder="Китайский светодиодный проектор Full HD (например, TouYinger или Wanbo).">${escapeHtml(item.reason)}</textarea></div>
+ <div><label class="caption">Характеристики</label><textarea class="small" data-equipment="${index}" data-field="reason" placeholder=" Разрешение 1920×1080 (Full HD), яркость от 500 ANSI-люмен, встроенный Android/Wi-Fi, чтение с USB.">${escapeHtml(item.reason)}</textarea></div>
+ <div><label class="caption">Приоритет</label><select data-equipment="${index}" data-field="priority">
+ <option${item.priority === 'Обязательная' ? ' selected' : ''}>Обязательная</option>
+ </select></div>
+ </div>
+ <div class="two-grid">
+ <div><label class="caption">Количество</label><input class="field" data-equipment="${index}" data-field="qty" type="text" value="${escapeHtml(item.qty)}" placeholder="1 шт." /></div>
+ <div><label class="caption">Ориентировочная цена</label><input class="field" data-equipment="${index}" data-field="price" type="text" value="${escapeHtml(item.price)}" placeholder="14 000 руб. за единицу" /></div>
+ </div>
+ <div><label class="caption">Обоснование</label><textarea class="small" data-equipment="${index}" data-field="reason" placeholder="Решает проблему вывода презентаций и кода на большой экран для всей аудитории. Параметры достаточны для работы при приглушенном свете (жалюзи). Нет переплаты за бренд (Epson/BenQ), ресурс светодиодной лампы в 5 раз выше, чем у классических ртутных ламп. ">${escapeHtml(item.reason)}</textarea></div>
+ <div class="row-head">
+ <div class="row-title">Позиция закупки ${index + 2}</div>
+ <button class="btn danger remove-btn" type="button" data-remove-equipment="${index}">Удалить</button>
+ </div>
+ <div class="mini-grid">
+ <div><label class="caption">Оборудование</label><textarea class="small" data-equipment="${index}" data-field="reason" placeholder="Настенно-потолочный ручной рулонный экран.">${escapeHtml(item.reason)}</textarea></div>
+ <div><label class="caption">Характеристики</label><textarea class="small" data-equipment="${index}" data-field="reason" placeholder="Размер 200×150 см, матовое белое полотно (Matt White), коэффициент усиления 1,0, угол обзора 160°.">${escapeHtml(item.reason)}</textarea></div>
+ <div><label class="caption">Приоритет</label><select data-equipment="${index}" data-field="priority">
+ <option${item.priority === 'Обязательная' ? ' selected' : ''}>Обязательная</option>
+ <option${item.priority === 'Рекомендуемая' ? ' selected' : ''}>Рекомендуемая</option>
+ <option${item.priority === 'Желательная' ? ' selected' : ''}>Желательная</option>
+ </select></div>
+ </div>
+ <div class="two-grid">
+ <div><label class="caption">Количество</label><input class="field" data-equipment="${index}" data-field="qty" type="text" value="${escapeHtml(item.qty)}" placeholder="1 шт." /></div>
+ <div><label class="caption">Ориентировочная цена</label><input class="field" data-equipment="${index}" data-field="price" type="text" value="${escapeHtml(item.price)}" placeholder="5 000 руб. за единицу" /></div>
+ </div>
+ <div><label class="caption">Обоснование</label><textarea class="small" data-equipment="${index}" data-field="reason" placeholder="Обеспечивает ровную поверхность для четкой проекции без искажений геометрии. Механический ручной привод надежен, дешев и не требует подведения электричества, в отличие от моторизованных экранов. ">${escapeHtml(item.reason)}</textarea></div>
+ <div class="row-head">
+ <div class="row-title">Позиция закупки ${index + 3}</div>
+ <button class="btn danger remove-btn" type="button" data-remove-equipment="${index}">Удалить</button>
+ </div>
+ <div class="mini-grid">
+ <div><label class="caption">Оборудование</label><textarea class="small" data-equipment="${index}" data-field="reason" placeholder="Офисные/учебные стулья в стиле Eames (пластиковый каркас, деревянные ножки).">${escapeHtml(item.reason)}</textarea></div>
+ <div><label class="caption">Характеристики</label><textarea class="small" data-equipment="${index}" data-field="reason" placeholder="Литой износостойкий пластик, мягкое сиденье из экокожи, нагрузка до 120 кг.">${escapeHtml(item.reason)}</textarea></div>
+ <div><label class="caption">Приоритет</label><select data-equipment="${index}" data-field="priority">
+ <option${item.priority === 'Обязательная' ? ' selected' : ''}>Обязательная</option>
+ </select></div>
+ </div>
+ <div class="two-grid">
+ <div><label class="caption">Количество</label><input class="field" data-equipment="${index}" data-field="qty" type="text" value="${escapeHtml(item.qty)}" placeholder="8 шт." /></div>
+ <div><label class="caption">Ориентировочная цена</label><input class="field" data-equipment="${index}" data-field="price" type="text" value="${escapeHtml(item.price)}" placeholder="2 000 руб. за единицу (при покупке комплектами)" /></div>
+ </div>
+ <div><label class="caption">Обоснование</label><textarea class="small" data-equipment="${index}" data-field="reason" placeholder="Организация посадочных мест для студентов. Стулья эргономичны, легко моются, имеют высокую ремонтопригодность. Покупка комплектов на маркетплейсах исключает наценку мебельных салонов. ">${escapeHtml(item.reason)}</textarea></div>
+ <div class="row-head">
+ <div class="row-title">Позиция закупки ${index + 4}</div>
+ <button class="btn danger remove-btn" type="button" data-remove-equipment="${index}">Удалить</button>
+ </div>
+ <div class="mini-grid">
+ <div><label class="caption">Оборудование</label><textarea class="small" data-equipment="${index}" data-field="reason" placeholder="Комплект материалов для сборки столов (мебельные щиты из сосны + металлические опоры).">${escapeHtml(item.reason)}</textarea></div>
+ <div><label class="caption">Характеристики</label><textarea class="small" data-equipment="${index}" data-field="reason" placeholder="Мебельный щит 1600×600×28 мм, стальные подстолья/ножки высотой 710-750 мм, крепеж, морилка.">${escapeHtml(item.reason)}</textarea></div>
+ <div><label class="caption">Приоритет</label><select data-equipment="${index}" data-field="priority">
+ <option${item.priority === 'Обязательная' ? ' selected' : ''}>Обязательная</option>
+ </select></div>
+ </div>
+ <div class="two-grid">
+ <div><label class="caption">Количество</label><input class="field" data-equipment="${index}" data-field="qty" type="text" value="${escapeHtml(item.qty)}" placeholder="2 комплекта." /></div>
+ <div><label class="caption">Ориентировочная цена</label><input class="field" data-equipment="${index}" data-field="price" type="text" value="${escapeHtml(item.price)}" placeholder="5 000 руб. за комплект стола" /></div>
+ </div>
+ <div><label class="caption">Обоснование</label><textarea class="small" data-equipment="${index}" data-field="reason" placeholder="Создание эргономичных рабочих мест нужного размера. Самостоятельная сборка из фабричных комплектующих (Леруа/Озон) обходится в 2–3 раза дешевле, чем покупка готовых учебных столов аналогичного качества. ">${escapeHtml(item.reason)}</textarea></div>
+ <div class="row-head">
+ <div class="row-title">Позиция закупки ${index + 5}</div>
+ <button class="btn danger remove-btn" type="button" data-remove-equipment="${index}">Удалить</button>
+ </div>
+ <div class="mini-grid">
+ <div><label class="caption">Оборудование</label><textarea class="small" data-equipment="${index}" data-field="reason" placeholder="Сплит-система (On/Off или инвертор начального уровня).">${escapeHtml(item.reason)}</textarea></div>
+ <div><label class="caption">Характеристики</label><textarea class="small" data-equipment="${index}" data-field="reason" placeholder="Мощность охлаждения 2,5–3,5 кВт (расчет на площадь до 25–30 кв. м с учетом тепла, выделяемого людьми и ноутбуками).">${escapeHtml(item.reason)}</textarea></div>
+ <div><label class="caption">Приоритет</label><select data-equipment="${index}" data-field="priority">
+ <option${item.priority === 'Обязательная' ? ' selected' : ''}>Обязательная</option>
+ <option${item.priority === 'Рекомендуемая' ? ' selected' : ''}>Рекомендуемая</option>
+ <option${item.priority === 'Желательная' ? ' selected' : ''}>Желательная</option>
+ </select></div>
+ </div>
+ <div class="two-grid">
+ <div><label class="caption">Количество</label><input class="field" data-equipment="${index}" data-field="qty" type="text" value="${escapeHtml(item.qty)}" placeholder="1 шт." /></div>
+ <div><label class="caption">Ориентировочная цена</label><input class="field" data-equipment="${index}" data-field="price" type="text" value="${escapeHtml(item.price)}" placeholder="22 000 руб. за единицу (без монтажа)" /></div>
+ </div>
+ <div><label class="caption">Обоснование</label><textarea class="small" data-equipment="${index}" data-field="reason" placeholder="Поддержание нормативного температурного режима для обеспечения высокой концентрации студентов. Выбрана базовая надежная модель без Wi-Fi и сложных фильтров, чтобы избежать переплаты. ">${escapeHtml(item.reason)}</textarea></div>
+ <div class="row-head">
+ <div class="row-title">Позиция закупки ${index + 6}</div>
+ <button class="btn danger remove-btn" type="button" data-remove-equipment="${index}">Удалить</button>
+ </div>
+ <div class="mini-grid">
+ <div><label class="caption">Оборудование</label><textarea class="small" data-equipment="${index}" data-field="reason" placeholder="Системный блок (учебная сборка).">${escapeHtml(item.reason)}</textarea></div>
+ <div><label class="caption">Характеристики</label><textarea class="small" data-equipment="${index}" data-field="reason" placeholder="Процессор: Intel Core i3-12100 / AMD Ryzen 5 4500 (4–6 ядер). Оперативная память: 16 ГБ DDR4. Накопитель: SSD 480–512 ГБ (NVMe/SATA) — уже в комплекте. Видеокарта: встроенная. Корпус: Micro-ATX, блок питания 400–450 Вт. ">${escapeHtml(item.reason)}</textarea></div>
+ <div><label class="caption">Приоритет</label><select data-equipment="${index}" data-field="priority">
+ <option${item.priority === 'Обязательная' ? ' selected' : ''}>Обязательная</option>
+ </select></div>
+ </div>
+ <div class="two-grid">
+ <div><label class="caption">Количество</label><input class="field" data-equipment="${index}" data-field="qty" type="text" value="${escapeHtml(item.qty)}" placeholder="20 шт." /></div>
+ <div><label class="caption">Ориентировочная цена</label><input class="field" data-equipment="${index}" data-field="price" type="text" value="${escapeHtml(item.price)}" placeholder="35 000 руб. за единицу" /></div>
+ </div>
+ <div><label class="caption">Обоснование</label><textarea class="small" data-equipment="${index}" data-field="reason" placeholder="Процессора со встроенной графикой достаточно для работы с браузером, офисными приложениями и обучающими платформами — дискретная видеокарта не нужна. 16 ГБ оперативной памяти позволяют комфортно работать с несколькими программами и множеством вкладок одновременно. SSD-накопитель емкостью 480–512 ГБ входит в комплект — отдельный накопитель не требуется. Цена 35 000 руб. соответствует рыночным офисным/учебным сборкам 2026 года. ">${escapeHtml(item.reason)}</textarea></div>
+ <div class="row-head">
+ <div class="row-title">Позиция закупки ${index + 7}</div>
+ <button class="btn danger remove-btn" type="button" data-remove-equipment="${index}">Удалить</button>
+ </div>
+ <div class="mini-grid">
+ <div><label class="caption">Оборудование</label><textarea class="small" data-equipment="${index}" data-field="reason" placeholder="Монитор">${escapeHtml(item.reason)}</textarea></div>
+ <div><label class="caption">Характеристики</label><textarea class="small" data-equipment="${index}" data-field="reason" placeholder="Диагональ: 23,8–24″. Разрешение: 1920 × 1080 (Full HD). Матрица: IPS (углы обзора 178°). Частота: 60 Гц. Порты: HDMI, VGA. Особенности: антибликовое покрытие, отсутствие мерцания, низкий уровень синего света">${escapeHtml(item.reason)}</textarea></div>
+ <div><label class="caption">Приоритет</label><select data-equipment="${index}" data-field="priority">
+ <option${item.priority === 'Обязательная' ? ' selected' : ''}>Обязательная</option>
+ </select></div>
+ </div>
+ <div class="two-grid">
+ <div><label class="caption">Количество</label><input class="field" data-equipment="${index}" data-field="qty" type="text" value="${escapeHtml(item.qty)}" placeholder="20 шт." /></div>
+ <div><label class="caption">Ориентировочная цена</label><input class="field" data-equipment="${index}" data-field="price" type="text" value="${escapeHtml(item.price)}" placeholder="5 500 руб. за единицу" /></div>
+ </div>
+ <div><label class="caption">Обоснование</label><textarea class="small" data-equipment="${index}" data-field="reason" placeholder="IPS-матрица обеспечивает чёткую картинку при взгляде сбоку — ученики за соседними партами видят экран без искажений. Частоты 60 Гц достаточно для статичных учебных материалов (текст, таблицы, видео) — более высокая частота только удорожает монитор без особой пользы для учебного процесса. Технологии Flicker-Free и Low Blue Light снижают нагрузку на глаза при длительных занятиях">${escapeHtml(item.reason)}</textarea></div>
+ <div class="row-head">
+ <div class="row-title">Позиция закупки ${index + 8}</div>
+ <button class="btn danger remove-btn" type="button" data-remove-equipment="${index}">Удалить</button>
+ </div>
+ <div class="mini-grid">
+ <div><label class="caption">Оборудование</label><textarea class="small" data-equipment="${index}" data-field="reason" placeholder="Клавиатура + мышь (комплект)">${escapeHtml(item.reason)}</textarea></div>
+ <div><label class="caption">Характеристики</label><textarea class="small" data-equipment="${index}" data-field="reason" placeholder="Подключение: проводное USB. Клавиатура: мембранная, низкопрофильная. Мышь: оптическая, 800–1600 точек на дюйм. Длина кабеля: от 1,5 м">${escapeHtml(item.reason)}</textarea></div>
+ <div><label class="caption">Приоритет</label><select data-equipment="${index}" data-field="priority">
+ <option${item.priority === 'Обязательная' ? ' selected' : ''}>Обязательная</option>
+ </select></div>
+ </div>
+ <div class="two-grid">
+ <div><label class="caption">Количество</label><input class="field" data-equipment="${index}" data-field="qty" type="text" value="${escapeHtml(item.qty)}" placeholder="20 комплектов." /></div>
+ <div><label class="caption">Ориентировочная цена</label><input class="field" data-equipment="${index}" data-field="price" type="text" value="${escapeHtml(item.price)}" placeholder="800 руб. за комплект" /></div>
+ </div>
+ <div><label class="caption">Обоснование</label><textarea class="small" data-equipment="${index}" data-field="reason" placeholder="Проводное подключение надежнее беспроводного в многолюдном классе — никаких проблем с батарейками и потерей сигнала. Мембранная клавиатура тише механической — не создает лишнего шума во время занятий. Дополнительные функции (подсветка, макросы, программируемые кнопки) не нужны — они только увеличивают стоимость. ">${escapeHtml(item.reason)}</textarea></div>
+ <div class="row-head">
+ <div class="row-title">Позиция закупки ${index + 9}</div>
+ <button class="btn danger remove-btn" type="button" data-remove-equipment="${index}">Удалить</button>
+ </div>
+ <div class="mini-grid">
+ <div><label class="caption">Оборудование</label><textarea class="small" data-equipment="${index}" data-field="reason" placeholder="Офисное кресло (для ученика).">${escapeHtml(item.reason)}</textarea></div>
+ <div><label class="caption">Характеристики</label><textarea class="small" data-equipment="${index}" data-field="reason" placeholder="Регулировка высоты (газлифт). Фиксация наклона спинки. Колесики: 2 тормозных, 2 поворотных. Обивка: сетка или экокожа (моющаяся). Нагрузка: до 80–100 кг">${escapeHtml(item.reason)}</textarea></div>
+ <div><label class="caption">Приоритет</label><select data-equipment="${index}" data-field="priority">
+ <option${item.priority === 'Рекомендуемый' ? ' selected' : ''}>Рекомендуемый</option>
+ </select></div>
+ </div>
+ <div class="two-grid">
+ <div><label class="caption">Количество</label><input class="field" data-equipment="${index}" data-field="qty" type="text" value="${escapeHtml(item.qty)}" placeholder="20 шт." /></div>
+ <div><label class="caption">Ориентировочная цена</label><input class="field" data-equipment="${index}" data-field="price" type="text" value="${escapeHtml(item.price)}" placeholder="6 000 руб. за единицу" /></div>
+ </div>
+ <div><label class="caption">Обоснование</label><textarea class="small" data-equipment="${index}" data-field="reason" placeholder="Регулировка высоты и наклона подходит для учеников разного роста — снижает утомляемость. Моющаяся обивка важна при ежедневном использовании в учебном классе. Дорогие «игровые» или «руководские» кресла с избыточными функциями не нужны">${escapeHtml(item.reason)}</textarea></div>
+ <div class="row-head">
+ <div class="row-title">Позиция закупки ${index + 10}</div>
+ <button class="btn danger remove-btn" type="button" data-remove-equipment="${index}">Удалить</button>
+ </div>
+ <div class="mini-grid">
+ <div><label class="caption">Оборудование</label><textarea class="small" data-equipment="${index}" data-field="reason" placeholder="ИБП (источник бесперебойного питания).">${escapeHtml(item.reason)}</textarea></div>
+ <div><label class="caption">Характеристики</label><textarea class="small" data-equipment="${index}" data-field="reason" placeholder="Мощность: 600–800 ВА. Тип: линейно-интерактивный. Розетки с аккумулятором: 2–3 шт. Защита от скачков напряжения. ">${escapeHtml(item.reason)}</textarea></div>
+ <div><label class="caption">Приоритет</label><select data-equipment="${index}" data-field="priority">
+ <option${item.priority === 'Рекомендуемый' ? ' selected' : ''}>Рекомендуемый</option>
+ </select></div>
+ </div>
+ <div class="two-grid">
+ <div><label class="caption">Количество</label><input class="field" data-equipment="${index}" data-field="qty" type="text" value="${escapeHtml(item.qty)}" placeholder="10 шт. (1 ИБП на 2 ПК)" /></div>
+  <div><label class="caption">Ориентировочная цена</label><input class="field" data-equipment="${index}" data-field="price" type="text" value="${escapeHtml(item.price)}" placeholder="5 000 руб. за единицу" /></div>
+ </div>
+ <div><label class="caption">Обоснование</label><textarea class="small" data-equipment="${index}" data-field="reason" placeholder="Защищает системные блоки от скачков напряжения — особенно актуально для школ в старых зданиях. При кратковременном отключении света дает 5–10 минут на сохранение документов и корректное завершение работы. Один ИБП на два стоящих рядом компьютера снижает затраты в 2 раза без потери функциональности. Линейно-интерактивная топология достаточна для учебных ПК (онлайн-ИБП избыточны).">${escapeHtml(item.reason)}</textarea></div>
+ `;
+ list.appendChild(row);
+ });
+}
+
+function renderPhotos(){
+ if(state.photos.длина > 1) state.photos = state.photos.срез (0, 1); 
+ const list = byId('Список фотографий');
+ list.innerHTML = "; 
+ состояние.фотографии.forEach((фото, индекс) => { 
+ const card = document.createElement('div');
+ card.className = 'медиа-карта';
+ card.innerHTML = `
+ <div class="row-head">
+ <h3>Фото текущего состояния ${index + 1}</h3>
+ <button class="btn danger remove-btn" type="button" data-remove-photo="${index}">Удалить</button>
+ </div>
+ <div class="ph" style="padding:0; overflow:hidden;">
+ <img src="https://i.imgur.com/0RTzCmH.jpeg" alt="Фото рабочего места 1" style="width:100%; height:100%; object-fit:cover; display:block;">
+ </div>
+ <input class="file-input" type="file" accept="image/*" data-photo-file="${index}" />
+ <label class="caption" style="margin-top:10px;">Путь к файлу для публикации</label>
+ <input class="field" data-photo="${index}" data-field="path" type="text" value="${escapeHtml(photo.path)}" placeholder="https://i.imgur.com/0RTzCmH.jpeg" />
+ <label class="caption" style="margin-top:10px;">Подпись</label>
+ <textarea class="small" data-photo="${index}" data-field="finding" placeholder="Общий вид аудитории: ряды столов, доска, проходы между столами и расстояние до стен.">${escapeHtml(photo.finding)}</textarea>
+ <label class="caption" style="margin-top:10px;">Вывод по фото</label>
+ <textarea class="small" data-photo="${index}" data-field="finding" placeholder="На фото видно, что аудитория физически мала для запланированного количества компьютеров. Расстояние между столами в рядах не превышает 50 см (норма — не менее 80–100 см для прохода). Расстояние от последнего ряда до задней стены — менее 30 см (необходимо минимум 50–60 см, чтобы можно было отодвинуть стул). Столы вплотную придвинуты к боковой стене, что затрудняет выход учеников. Итог: в данном помещении невозможно комфортно и безопасно разместить 20 рабочих мест. Реальная вместимость — не более 12–14 человек. ">${escapeHtml(photo.finding)}</textarea>
+ <div class="row-head">
+ <h3>Фото текущего состояния ${index + 2}</h3>
+ <button class="btn danger remove-btn" type="button" data-remove-photo="${index}">Удалить</button>
+ </div>
+ <div class="ph" style="padding:0; overflow:hidden;">
+ <img src="https://i.imgur.com/kiNgm5l.jpeg" alt="Фото рабочего места 1" style="width:100%; height:100%; object-fit:cover; display:block;">
+ </div>
+ <input class="file-input" type="file" accept="image/*" data-photo-file="${index}" />
+ <label class="caption" style="margin-top:10px;">Путь к файлу для публикации</label>
+ <input class="field" data-photo="${index}" data-field="path" type="text" value="${escapeHtml(photo.path)}" placeholder="https://i.imgur.com/kiNgm5l.jpeg" />
+ <label class="caption" style="margin-top:10px;">Подпись</label>
+ <textarea class="small" data-photo="${index}" data-field="finding" placeholder="Внешний вид одного из рабочих мест: системный блок, монитор, попытка включения.">${escapeHtml(photo.finding)}</textarea>
+ <label class="caption" style="margin-top:10px;">Вывод по фото</label>
+ <textarea class="small" data-photo="${index}" data-field="finding" placeholder="Фотография фиксирует факт неработоспособности части компьютерного парка. При визуальном осмотре и попытке включения выявлено: некоторые ПК не включаются — при нажатии кнопки питания системный блок не подает признаков жизни (нет индикации, не крутятся вентиляторы) либо индикатор горит, но монитор остается черным. Это указывает на выход из строя блока питания, материнской платы или оперативной памяти. «Рабочие» компьютеры сильно тормозят — даже при открытии браузера с 2–3 вкладками наблюдаются длительные зависания (10–20 секунд), курсор мыши периодически замирает, переключение между программами происходит с заметной задержкой. Характерно для устаревшей конфигурации (жесткий диск вместо твердотельного накопителя, недостаточный объем оперативной памяти).">${escapeHtml(photo.finding)}</textarea>
+ `;
+ list.appendChild(card);
+ });
+}
+
+function renderVisuals(){
+ const list = byId('visualList');
+ list.innerHTML = '';
+ state.visuals.forEach((visual, index) => {
+ const card = document.createElement('div');
+ card.className = 'media-card';
+ card.innerHTML = `
+ <div class="row-head">
+ <h3>ИИ-визуализация ${index + 1}</h3>
+ <button class="btn danger remove-btn" type="button" data-remove-visual="${index}">Удалить</button>
+ </div>
+ <div class="media-preview" data-visual-preview="${index}">Предварительный просмотр визуализации</div>
+ <input class="file-input" type="file" accept="image/*" data-visual-file="${index}" />
+ <label class="caption" style="margin-top:10px;">Путь к файлу для публикации</label>
+ <input class="field" data-visual="${index}" data-field="path" type="text" value="${escapeHtml(visual.path)}" placeholder="images/visual-${index + 1}.jpg" />
+ <label class="caption" style="margin-top:10px;">Промптов или метод создания</label>
+ <textarea class="small" data-visual="${index}" data-field="prompt" placeholder="Опишите промпт, модель или способ создания визуализации.">${escapeHtml(visual.prompt)}</textarea>
+ <label class="caption" style="margin-top:10px;">Назначение визуализации</label>
+ <input class="field" data-visual="${index}" data-field="purpose" type="text" value="${escapeHtml(visual.purpose)}" placeholder="Например: показать новую рассадку и освещение" />
+ <label class="caption" style="margin-top:10px;">Что доказывает изображение</label>
+ <textarea class="small" data-visual="${index}" data-field="criteria" placeholder="Какая проектная идея становится понятнее благодаря изображению.">${escapeHtml(visual.criteria)}</textarea>
+ `;
+ list.appendChild(card);
+ });
+}
+
+function renderChecklist(){
+ const box = byId('qualityChecklist');
+ box.innerHTML = '';
+ let absoluteIndex = 0;
+ checklistGroups.forEach(group => {
+ const card = document.createElement('div');
+ card.className = 'check-card';
+ const items = group.items.map(text => {
+ const key = 'check_' + absoluteIndex;
+ absoluteIndex += 1;
+ const checked = ' checked';
+ return `<label class="check-item"><input type="checkbox" data-check="${key}"${checked}><span>${text}</span></label>`;
+ }).join('');
+ card.innerHTML = `<h3>${group.title}</h3>${items}`;
+ box.appendChild(card);
+ });
+ for(let i = 0; i < absoluteIndex; i++) {
+ state.checklist['check_' + i] = true;
+ }
+ updateChecklistSummary();
+}
+
+function updateChecklistSummary(){
+ const all = document.querySelectorAll('[data-check]');
+ const checked = document.querySelectorAll('[data-check]:checked');
+ const total = all.length;
+ const done = checked.length;
+ const percent = total ? Math.round(done / total * 100) : 0;
+ byId('doneCount').textContent = done;
+ byId('totalCount').textContent = total;
+ byId('readyPercent').textContent = percent + '%';
+ byId('scoreFill').style.width = percent + '%';
+ let status = 'Начните заполнять';
+ if(percent >= 90) status = 'Готово к защите';
+ else if(percent >= 70) status = 'Почти готово';
+ else if(percent >= 45) status = 'Требуется доработка';
+ else if(percent > 0) status = 'Соберите доказательства';
+ byId('readyStatus').textContent = status;
+}
+
+function captureState(){
+ document.querySelectorAll('[data-team]').forEach(el => {
+ state.team[Number(el.dataset.team)][el.dataset.field] = el.value;
+ });
+ document.querySelectorAll('[data-equipment]').forEach(el => {
+ state.equipment[Number(el.dataset.equipment)][el.dataset.field] = el.value;
+ });
+ document.querySelectorAll('[data-photo]').forEach(el => {
+ state.photos[Number(el.dataset.photo)][el.dataset.field] = el.value;
+ });
+ document.querySelectorAll('[data-visual]').forEach(el => {
+ state.visuals[Number(el.dataset.visual)][el.dataset.field] = el.value;
+ });
+ document.querySelectorAll('[data-check]').forEach(el => {
+ state.checklist[el.dataset.check] = el.checked;
+ });
+}
+
+функция saveDraft(){ 
+captureState(); 
+ const ids = [ 
+"Заголовок проекта", "Тип объекта", "Номер комнаты", "аудитория", "уникальность", "Цель проекта", 
+'noBudgetPlan','budgetPlan', 'tco', 'workplaceErgo', 'restZone', 'serverNode', 
+ 'safetyAccess','finalProjectConclusion', 'План реализации'
+ ];
+ const fields = {};
+ ids.forEach(id => fields[id] = byId(id).value);
+ localStorage.setItem(storageKey, JSON.stringify({...fields, dynamic:state}));
+}
+
+function loadDraft(){
+ const raw = localStorage.getItem(storageKey);
+ if(!raw) return;
+ try{
+ const saved = JSON.parse(raw);
+ Object.entries(saved).forEach(([key, value]) => {
+ if(key === 'dynamic') return;
+ const el = byId(key);
+ if(el) el.value = value || '';
+ });
+ if(saved.dynamic){
+ state = {
+ ...state,
+ ...saved.dynamic,
+ photos: saved.dynamic.photos && saved.dynamic.photos.length ? saved.dynamic.photos : state.photos,
+ visuals: saved.dynamic.visuals && saved.dynamic.visuals.length >= 5 ? saved.dynamic.visuals : state.visuals
+ };
+ }
+ } catch(e){}
+}
+
+function previewImage(input, previewSelector){
+ const file = input.files && input.files[0];
+ const preview = document.querySelector(previewSelector);
+ if(!file || !preview) return;
+ const reader = new FileReader();
+ reader.onload = () => {
+ preview.innerHTML = `<img src="${reader.result}" alt="Предварительный просмотр" />`;
+ }; 
+ reader.readAsDataURL(файл);
+}
+
+document.addEventListener('ввод', событие => {
+ if(event.target.matches('ввод, текстовое поле, выбор')){
+ saveDraft();
+ }
+});
+
+document.addEventListener('изменить', событие => { 
+ const target = событие.target;
+ if(target.matches('[data-check]')){
+ captureState();
+ updateChecklistSummary();
+ saveDraft();
+ }
+ if(target.matches('[data-photo-file]')){
+ previewImage(target, `[data-photo-preview="${target.dataset.photoFile}"]`);
+ }
+ if(target.matches('[data-visual-file]')){
+ previewImage(target, `[data-visual-preview="${target.dataset.visualFile}"]`);
+ }
+});
+
+document.addEventListener('click', event => { 
+ const target = event.target;
+ if(target.matches('[data-remove-team]')){
+ if(состояние.команда.длина > 1){
+ captureState();
+ state.team.splice(Number(target.dataset.removeTeam), 1);
+ renderTeam();
+ saveDraft();
+ }
+ }
+ if(target.matches('[data-remove-equipment]')){
+ if(state.equipment.length > 1){
+ captureState();
+ state.equipment.splice(Number(target.dataset.removeEquipment), 1);
+ renderEquipment();
+ saveDraft();
+ }
+ }
+ if(target.matches('[data-remove-photo]')){
+ if(state.photos.длина > 1){
+ captureState(); 
+ state.photos.splice(Номер(target.dataset.removePhoto), 1);
+ renderPhotos();
+ saveDraft();
+ }
+ } 
+ if(цель.соответствует('[данные-удалить-визуальные]')){
+ if(состояние.визуальные элементы.длина > 5){
+ captureState(); 
+ состояние.визуальные элементы.соединение(Номер (target.dataset.removeVisual), 1);
+ Визуализационные элементы ();
+ Сохраненный проект();
+ } else {
+ alert('В задании должно остаться не менее 5 визуализаций.');
+ }
+ }
+});
+
+byId('addMemberBtn').addEventListener('click', () => {
+ captureState();
+ if(state.team.length < 5){
+ state.team.push({name:'', duties:'', role:'', conclusion:''});
+ renderTeam();
+ Сохраненный проект();
+ } else {
+ alert('Команда может включать не более 5 человек.');
+ }
+});
+
+byId('addEquipmentBtn').addEventListener('click', () => {
+ captureState(); 
+ state.equipment.push({название:", характеристики:", кол-во:", цена:", причина:", приоритет:'Рекомендуемая'});
+ renderEquipment();
+ saveDraft();
+});
+
+byId('addPhotoBtn').addEventListener('click', () => {
+ captureState();
+ state.photos.push({path:'', caption:'', finding:''});
+ renderPhotos();
+ saveDraft();
+});
+
+byId('addVisualBtn').addEventListener('click', () => {
+ captureState(); 
+ state.visuals.push({путь:", приглашение:", цель:", критерии:"});
+ renderVisuals();
+ saveDraft();
+});
+
+byId('saveBtn').addEventListener('click', () => {
+ saveDraft();
+ alert('Черновик сохранён в браузере.');
+});
+
+byId('printBtn').addEventListener('click', () => {
+ saveDraft();
+ window.print();
+});
+
+byId('clearBtn').addEventListener('click', () => {
+ if(confirm('Очистить сохраненный черновик этой страницы?')){
+ localStorage.removeItem(storageKey);
+ location.reload();
+ }
+});
+
+loadDraft(); 
+renderTeam();
+Оборудование для визуализации(); 
+Фотографии для визуализации ();
+// renderVisuals(); 
+renderChecklist();
+</script>
+</body>
+</html>
